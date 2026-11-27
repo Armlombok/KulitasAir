@@ -4,7 +4,7 @@ const API_URL = CONFIG.scriptUrl;
 const SENSOR_COLUMNS = [
   ["Nilai_pH", "metricPh"], ["Nilai_turbidity", "metricTurbidity"],
   ["Nilai_DO", "metricDo"], ["Nilai_EC", "metricEc"],
-  ["Flow_Rate", "metricFlow"], ["DS18B20", "metricTemperature"]
+  ["Flow_Rate", "metricFlow"], ["Temperature", "metricTemperature"]
 ];
 const CALIBRATION = [
   ["pH", "ph_a", "ph_b"], ["Turbidity", "turbidity_a", "turbidity_b"],
@@ -14,7 +14,7 @@ const CALIBRATION = [
 const chartSpecs = [
   ["chartPh", "Nilai_pH", "#159f93"], ["chartTurbidity", "Nilai_turbidity", "#e5a624"],
   ["chartDo", "Nilai_DO", "#327fb8"], ["chartEc", "Nilai_EC", "#8059a4"],
-  ["chartFlow", "Flow_Rate", "#d87550"], ["chartTemperature", "DS18B20", "#d55555"]
+  ["chartFlow", "Flow_Rate", "#d87550"], ["chartTemperature", "Temperature", "#d55555"]
 ];
 let allRows = [], headers = [], charts = [];
 
