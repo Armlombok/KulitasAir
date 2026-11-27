@@ -15,7 +15,7 @@
   </header>
   <main>
     <section class="hero">
-      <div><p class="eyebrow">MONITORING REAL-TIME</p><h2>Kualitas air</h2><p class="subtle" id="lastUpdated">Menghubungkan ke Google Sheets…</p></div>
+      <div><p class="eyebrow">MONITORING REAL-TIME</p><h2>Kualitas air, dalam satu pandangan.</h2><p class="subtle" id="lastUpdated">Menghubungkan ke Google Sheets…</p></div>
       <div class="hero-actions"><label>Rentang grafik <select id="chartRange"><option value="50">50 data terakhir</option><option value="200">200 data terakhir</option><option value="all">Semua data</option></select></label></div>
     </section>
     <section class="metrics" aria-label="Nilai sensor terakhir">
@@ -23,7 +23,6 @@
       <article class="metric turbidity"><p>Turbidity</p><strong id="metricTurbidity">—</strong><span>NTU</span></article>
       <article class="metric oxygen"><p>Dissolved Oxygen</p><strong id="metricDo">—</strong><span>mg/L</span></article>
       <article class="metric ec"><p>Electrical Conductivity</p><strong id="metricEc">—</strong><span>nilai sensor</span></article>
-      <article class="metric flow"><p>Flow rate</p><strong id="metricFlow">—</strong><span>pulse/s + offset</span></article>
       <article class="metric temperature"><p>Temperature</p><strong id="metricTemperature">—</strong><span>°C</span></article>
     </section>
     <section class="section-heading"><div><p class="eyebrow">TREN PENGUKURAN</p><h2>Grafik nilai sensor</h2></div><p class="subtle">Pilih periode di atas untuk menyesuaikan titik grafik.</p></section>
@@ -32,7 +31,6 @@
       <article class="panel chart-panel"><h3>Turbidity <small>NTU</small></h3><canvas id="chartTurbidity"></canvas></article>
       <article class="panel chart-panel"><h3>Dissolved Oxygen <small>mg/L</small></h3><canvas id="chartDo"></canvas></article>
       <article class="panel chart-panel"><h3>Electrical Conductivity</h3><canvas id="chartEc"></canvas></article>
-      <article class="panel chart-panel"><h3>Flow rate</h3><canvas id="chartFlow"></canvas></article>
       <article class="panel chart-panel"><h3>Temperature <small>°C</small></h3><canvas id="chartTemperature"></canvas></article>
     </section>
     <section class="section-heading"><div><p class="eyebrow">REKAP DATA</p><h2>Riwayat pengukuran</h2></div><div class="filters"><label>Dari <input id="fromDate" type="date"></label><label>Sampai <input id="toDate" type="date"></label><button class="secondary" id="applyFilter">Terapkan</button><button class="secondary" id="clearFilter">Reset</button></div></section>
