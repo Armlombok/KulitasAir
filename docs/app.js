@@ -16,6 +16,7 @@ const chartSpecs = [
   ["chartFlow", "Flow_Rate", "#d87550"], ["chartTemperature", "Temperature", "#d55555"]
 ];
 let allRows = [], headers = [], charts = [];
+let calibrationDirty = false;
 
 const $ = id => document.getElementById(id);
 const getDate = row => String(row.Timestamp || "").slice(0, 10);
@@ -101,8 +102,21 @@ function render() {
 }
 
 function renderCalibration(values = {}) {
+  // Jangan timpa formula ketika pengguna sedang mengedit.
+  if (calibrationDirty) return;
+
   $("calibrationFields").innerHTML = CALIBRATION.map(([label, key]) => `
-    <div class="cal-field"><h3>${label}</h3><label class="formula-label">Formula<input required maxlength="96" type="text" name="${key}" value="${escapeHtml(values[key] ?? "X")}" placeholder="contoh: 3.5*X^2+4*X+0.9"></label></div>`).join("");
+    <div class="cal-field">
+      <h3>${label}</h3>
+      <label class="formula-label">
+        Formula
+        <input required maxlength="96" type="text"
+          name="${key}"
+          value="${escapeHtml(values[key] ?? "X")}"
+          placeholder="contoh: 3.5*X^2+4*X+0.9">
+      </label>
+    </div>
+  `).join("");
 }
 
 async function loadCalibration() {
@@ -134,6 +148,7 @@ async function submitCalibration(event) {
     if (result.status !== "success") throw new Error(result.message || "Gagal menyimpan");
     message.textContent = "Formula tersimpan. UPDATE menunggu diambil ESP32.";
     $("writeToken").value = "";
+    calibrationDirty = false;
   } catch (error) {
     message.className = "form-message error";
     message.textContent = `Gagal: ${error.message}`;
@@ -158,6 +173,15 @@ function wireEvents() {
   $("downloadToday").addEventListener("click", () => { const day = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Makassar" }); downloadCsv(allRows.filter(row => getDate(row) === day), `waterwatch-${day}.csv`); });
   $("downloadDates").addEventListener("click", () => downloadCsv(selectedRows(), "waterwatch-rentang-tanggal.csv"));
   $("calibrationForm").addEventListener("submit", submitCalibration);
+
+  // Deteksi ketika pengguna mulai mengedit formula.
+  $("calibrationFields").addEventListener("focusin", () => {
+    calibrationDirty = true;
+  });
+  
+  $("calibrationFields").addEventListener("input", () => {
+    calibrationDirty = true;
+  });
 }
 
 function showError(error) {
