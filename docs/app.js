@@ -7,9 +7,8 @@ const SENSOR_COLUMNS = [
   ["Flow_Rate", "metricFlow"], ["Temperature", "metricTemperature"]
 ];
 const CALIBRATION = [
-  ["pH", "ph_a", "ph_b"], ["Turbidity", "turbidity_a", "turbidity_b"],
-  ["Dissolved Oxygen", "do_a", "do_b"], ["Electrical Conductivity", "ec_a", "ec_b"],
-  ["Flow offset", "flow_offset", null]
+  ["pH", "ph"], ["Turbidity", "turbidity"], ["Dissolved Oxygen", "do"],
+  ["Electrical Conductivity", "ec"], ["Flow rate", "flow"]
 ];
 const chartSpecs = [
   ["chartPh", "Nilai_pH", "#159f93"], ["chartTurbidity", "Nilai_turbidity", "#e5a624"],
@@ -102,14 +101,13 @@ function render() {
 }
 
 function renderCalibration(values = {}) {
-  $("calibrationFields").innerHTML = CALIBRATION.map(([label, first, second]) => second ? `
-    <div class="cal-field"><h3>${label}</h3><div class="cal-pair"><label>a<input required step="any" type="number" name="${first}" value="${values[first] ?? ""}"></label><label>b<input required step="any" type="number" name="${second}" value="${values[second] ?? ""}"></label></div></div>` :
-    `<div class="cal-field"><h3>${label}</h3><div class="cal-pair"><label>nilai<input required step="any" type="number" name="${first}" value="${values[first] ?? ""}"></label></div></div>`).join("");
+  $("calibrationFields").innerHTML = CALIBRATION.map(([label, key]) => `
+    <div class="cal-field"><h3>${label}</h3><label class="formula-label">Formula<input required maxlength="96" type="text" name="${key}" value="${escapeHtml(values[key] ?? "X")}" placeholder="contoh: 3.5*X^2+4*X+0.9"></label></div>`).join("");
 }
 
 async function loadCalibration() {
   const result = await getApi({ action: "calibration" });
-  renderCalibration(result.calibration);
+  renderCalibration(result.formulas);
 }
 
 function downloadCsv(rows, filename) {
@@ -126,15 +124,15 @@ function downloadCsv(rows, filename) {
 async function submitCalibration(event) {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
-  const calibration = Object.fromEntries([...form.entries()].map(([key, value]) => [key, Number(value)]));
+  const formulas = Object.fromEntries([...form.entries()].map(([key, value]) => [key, String(value).trim()]));
   const message = $("calibrationMessage");
   message.className = "form-message";
-  message.textContent = "Menyimpan kalibrasi…";
+  message.textContent = "Menyimpan formula…";
   try {
-    const response = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "setCalibration", calibration, writeToken: $("writeToken").value }) });
+    const response = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "setCalibration", formulas, writeToken: $("writeToken").value }) });
     const result = await response.json();
     if (result.status !== "success") throw new Error(result.message || "Gagal menyimpan");
-    message.textContent = "Kalibrasi tersimpan. UPDATE menunggu diambil ESP32.";
+    message.textContent = "Formula tersimpan. UPDATE menunggu diambil ESP32.";
     $("writeToken").value = "";
   } catch (error) {
     message.className = "form-message error";
