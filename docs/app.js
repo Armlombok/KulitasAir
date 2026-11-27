@@ -4,16 +4,16 @@ const API_URL = CONFIG.scriptUrl;
 const SENSOR_COLUMNS = [
   ["Nilai_pH", "metricPh"], ["Nilai_turbidity", "metricTurbidity"],
   ["Nilai_DO", "metricDo"], ["Nilai_EC", "metricEc"],
-  ["Flow_Rate", "metricFlow"], ["Temperature", "metricTemperature"]
+  ["Temperature", "metricTemperature"]
 ];
 const CALIBRATION = [
   ["pH", "ph"], ["Turbidity", "turbidity"], ["Dissolved Oxygen", "do"],
-  ["Electrical Conductivity", "ec"], ["Flow rate", "flow"]
+  ["Electrical Conductivity", "ec"]
 ];
 const chartSpecs = [
   ["chartPh", "Nilai_pH", "#159f93"], ["chartTurbidity", "Nilai_turbidity", "#e5a624"],
   ["chartDo", "Nilai_DO", "#327fb8"], ["chartEc", "Nilai_EC", "#8059a4"],
-  ["chartFlow", "Flow_Rate", "#d87550"], ["chartTemperature", "Temperature", "#d55555"]
+  ["chartTemperature", "Temperature", "#d55555"]
 ];
 let allRows = [], headers = [], charts = [];
 let calibrationDirty = false;
@@ -102,21 +102,9 @@ function render() {
 }
 
 function renderCalibration(values = {}) {
-  // Jangan timpa formula ketika pengguna sedang mengedit.
   if (calibrationDirty) return;
-
   $("calibrationFields").innerHTML = CALIBRATION.map(([label, key]) => `
-    <div class="cal-field">
-      <h3>${label}</h3>
-      <label class="formula-label">
-        Formula
-        <input required maxlength="96" type="text"
-          name="${key}"
-          value="${escapeHtml(values[key] ?? "X")}"
-          placeholder="contoh: 3.5*X^2+4*X+0.9">
-      </label>
-    </div>
-  `).join("");
+    <div class="cal-field"><h3>${label}</h3><label class="formula-label">Formula<input required maxlength="96" type="text" name="${key}" value="${escapeHtml(values[key] ?? "X")}" placeholder="contoh: 3.5*X^2+4*X+0.9"></label></div>`).join("");
 }
 
 async function loadCalibration() {
@@ -173,12 +161,6 @@ function wireEvents() {
   $("downloadToday").addEventListener("click", () => { const day = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Makassar" }); downloadCsv(allRows.filter(row => getDate(row) === day), `waterwatch-${day}.csv`); });
   $("downloadDates").addEventListener("click", () => downloadCsv(selectedRows(), "waterwatch-rentang-tanggal.csv"));
   $("calibrationForm").addEventListener("submit", submitCalibration);
-
-  // Deteksi ketika pengguna mulai mengedit formula.
-  $("calibrationFields").addEventListener("focusin", () => {
-    calibrationDirty = true;
-  });
-  
   $("calibrationFields").addEventListener("input", () => {
     calibrationDirty = true;
   });
