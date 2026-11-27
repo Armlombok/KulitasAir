@@ -15,7 +15,7 @@
   </header>
   <main>
     <section class="hero">
-      <div><p class="eyebrow">MONITORING REAL-TIME</p><h2>Kualitas air</h2><p class="subtle" id="lastUpdated">Menghubungkan ke Google Sheets…</p></div>
+      <div><p class="eyebrow">MONITORING REAL-TIME</p><h2>Kualitas air, dalam satu pandangan.</h2><p class="subtle" id="lastUpdated">Menghubungkan ke Google Sheets…</p></div>
       <div class="hero-actions"><label>Rentang grafik <select id="chartRange"><option value="50">50 data terakhir</option><option value="200">200 data terakhir</option><option value="all">Semua data</option></select></label></div>
     </section>
     <section class="metrics" aria-label="Nilai sensor terakhir">
@@ -37,8 +37,8 @@
     </section>
     <section class="section-heading"><div><p class="eyebrow">REKAP DATA</p><h2>Riwayat pengukuran</h2></div><div class="filters"><label>Dari <input id="fromDate" type="date"></label><label>Sampai <input id="toDate" type="date"></label><button class="secondary" id="applyFilter">Terapkan</button><button class="secondary" id="clearFilter">Reset</button></div></section>
     <section class="panel data-panel"><div class="table-toolbar"><p id="tableInfo">Belum ada data.</p><div class="downloads"><button id="downloadAll">Unduh semua CSV</button><button id="downloadToday">Unduh hari ini</button><button id="downloadDates">Unduh sesuai tanggal</button></div></div><div class="table-wrap"><table><thead id="dataHead"></thead><tbody id="dataBody"></tbody></table></div></section>
-    <section class="section-heading"><div><p class="eyebrow">KALIBRASI</p><h2>Koefisien sensor</h2></div><p class="subtle">Penyimpanan akan mengirim perintah UPDATE ke ESP32.</p></section>
-    <section class="panel calibration-panel"><div class="calibration-note"><span>!</span><p>Gunakan hasil pengukuran standar yang tervalidasi. ESP32 akan memeriksa pembaruan paling lambat sekitar 30 detik.</p></div><form id="calibrationForm"><div class="calibration-grid" id="calibrationFields"></div><div class="form-footer"><label>Token tulis <input id="writeToken" type="password" autocomplete="off" placeholder="Opsional"></label><button class="primary" type="submit">Simpan &amp; kirim UPDATE</button></div></form><p class="form-message" id="calibrationMessage"></p></section>
+    <section class="section-heading"><div><p class="eyebrow">KALIBRASI</p><h2>Formula sensor</h2></div><p class="subtle">Gunakan <code>X</code> sebagai nilai mentah dari sensor.</p></section>
+    <section class="panel calibration-panel"><div class="calibration-note"><span>!</span><p>Contoh: <code>4.5*X-3.9</code> atau <code>3.5*X^2+4*X+0.9</code>. Didukung: +, -, *, /, ^, (), abs, sqrt, log, exp. ESP32 mengambil UPDATE paling lambat sekitar 30 detik.</p></div><form id="calibrationForm"><div class="calibration-grid" id="calibrationFields"></div><div class="form-footer"><label>Token tulis <input id="writeToken" type="password" autocomplete="off" placeholder="Opsional"></label><button class="primary" type="submit">Simpan formula &amp; kirim UPDATE</button></div></form><p class="form-message" id="calibrationMessage"></p></section>
   </main>
   <footer>WaterWatch · Fakultas Teknologi Pangan dan Agroindustri · Universitas Mataram</footer>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
